@@ -269,6 +269,35 @@ class Framework extends BaseApp {
         super.update();
     }
 
+    rotateCamera(status, direction) {
+        switch (direction) {
+            case APPCONFIG.RIGHT:
+                this.rotDirection = 1;
+                this.rotAxis = `y`;
+                break;
+
+            case APPCONFIG.LEFT:
+                this.rotDirection = -1;
+                this.rotAxis = `y`;
+                break;
+
+            case APPCONFIG.UP:
+                this.rotDirection = 1;
+                this.rotAxis = `x`;
+                break;
+
+            case APPCONFIG.DOWN:
+                this.rotDirection = -1;
+                this.rotAxis = `x`;
+                break;
+
+            default:
+                break;
+        };
+         
+        this.cameraRotate = status;
+    }
+    
     zoomIn(status) {
         this.zoomingIn = status;
     }
