@@ -184,8 +184,11 @@ export class BaseApp {
         this.controls.staticMoving = true;
         this.controls.dynamicDampingFactor = 0.3;
 
-        //this.controls.disableMovement();
-
+        // Disable controls
+        this.controls.noRotate = true;
+	    this.controls.noZoom = true;
+        this.controls.noPan = true;
+        
         this.controls.keys = [ 65, 83, 68 ];
 
         let lookAt = new THREE.Vector3(SceneConfig.LookAtPos.x, SceneConfig.LookAtPos.y, SceneConfig.LookAtPos.z);
