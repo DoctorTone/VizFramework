@@ -71,6 +71,11 @@ class Framework extends BaseApp {
             range: [1, 3]
         };
 
+        let gapYearConfig = {
+            Year: 1,
+            range: [1, 3]
+        };
+
         let trendConfig = {
             Year1: false
         };
@@ -330,6 +335,44 @@ class Framework extends BaseApp {
         super.update();
     }
 
+    redrawScene(xIncrement, zIncrement) {
+        const barsPerRow = APPCONFIG.NUM_BARS_PER_ROW;
+        let currentBar;
+        let currentLabel;
+        let labelValue;
+        for(let row=0; row<APPCONFIG.NUM_ROWS; ++row) {
+            for(let bar=0; bar<barsPerRow; ++bar) {
+                currentBar = this.bars[(row * barsPerRow) + bar];
+                currentBar.position.x = APPCONFIG.barStartPos.x + (xIncrement * bar);
+                currentBar.position.z = APPCONFIG.barStartPos.z + (zIncrement * row);
+
+                // Value labels
+                labelValue = (row * APPCONFIG.NUM_BARS_PER_ROW) + bar;
+                currentLabel = this.labelManager.getLabel("valueLabel" + labelValue);
+                if (currentLabel) {
+                    currentLabel.setXPosition(currentBar.position.x);
+                    currentLabel.setZPosition(currentBar.position.z);
+                }
+
+                // Month labels
+                if (row === 0) {
+                    currentLabel = this.labelManager.getLabel("monthLabel" + bar);
+                    if (currentLabel) {
+                        currentLabel.setXPosition(currentBar.position.x);
+                    }
+                }
+
+                // Year labels
+                if (bar === 0) {
+                    currentLabel = this.labelManager.getLabel("yearLabel" + row);
+                    if (currentLabel) {
+                        currentLabel.setZPosition(currentBar.position.z);
+                    }
+                }
+            }
+        }
+    }
+
     rotateCamera(status, direction) {
         switch (direction) {
             case APPCONFIG.RIGHT:
@@ -389,6 +432,12 @@ class Framework extends BaseApp {
                 label.setVisibility(currentMonth.visible);
             }
         }
+    }
+
+    scaleBars(xScale, zScale) {
+        let scaledIncX = APPCONFIG.BAR_INC_X * xScale;
+        let scaledIncZ = APPCONFIG.BAR_INC_Z * zScale;
+        this.redrawScene(scaledIncX, scaledIncZ);
     }
 }
 
