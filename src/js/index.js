@@ -139,6 +139,105 @@ class Framework extends BaseApp {
 
         // Add ground
         this.addGroundPlane();
+
+        // Add bars to scene
+        const barGeom = new THREE.CylinderBufferGeometry(APPCONFIG.BAR_RADIUS, APPCONFIG.BAR_RADIUS, APPCONFIG.BAR_HEIGHT, APPCONFIG.BAR_SEGMENTS, APPCONFIG.BAR_SEGMENTS);
+        const bars = [];
+        this.createBarMaterials();
+        let barMesh;
+        let label;
+        let labelProperty;
+        let yearData;
+        let monthData;
+        let currentYear;
+        let currentGroup;
+        let currentValueGroup;
+        // Lines
+        let monthlyLinePositions = [];
+        
+        for(let row=0; row<APPCONFIG.NUM_ROWS; ++row) {
+            currentYear = row + 1;
+            // Create group
+            currentGroup = new THREE.Group();
+            currentGroup.name = "Year" + currentYear;
+            this.root.add(currentGroup);
+
+            currentValueGroup = new THREE.Group();
+            currentValueGroup.name = "ValuesYear" + currentYear;
+            currentValueGroup.visible = false;
+            
+            this.root.add(currentValueGroup);
+
+            let linePositions = [];
+            let labelValue;
+
+            for(let bar=0; bar<APPCONFIG.NUM_BARS_PER_ROW; ++bar) {
+                // Label properties
+                labelProperty = {};
+                labelProperty.position = new THREE.Vector3();
+
+                // Create mesh
+                barMesh = new THREE.Mesh(barGeom, this.barMaterials[row]);
+                barMesh.name = currentGroup.name + APPCONFIG.MONTHS[bar];
+                bars.push(barMesh);
+                barMesh.position.set(APPCONFIG.barStartPos.x + (APPCONFIG.BAR_INC_X * bar), APPCONFIG.barStartPos.y, APPCONFIG.barStartPos.z + (APPCONFIG.BAR_INC_Z * row));
+
+                yearData = salesData["Year" + currentYear];
+                monthData = yearData[bar].sales;
+                if (monthData === 0) {
+                    monthData = 0.001;
+                }
+                barMesh.scale.set(1, monthData, 1);
+                barMesh.position.y += (monthData * 5);
+                currentGroup.add(barMesh);
+
+                // Lines
+                linePositions.push(barMesh.position.x, barMesh.position.y*2, barMesh.position.z);
+
+                // Value labels
+                labelProperty.position.copy(barMesh.position);
+                labelProperty.position.y *= 2;
+                labelProperty.position.y += APPCONFIG.VALUE_OFFSET;
+                labelProperty.visibility = true;
+                labelProperty.scale = APPCONFIG.VALUE_SCALE;
+                if (monthData < 0.5) {
+                    monthData = 0;
+                }
+                labelValue = (row * APPCONFIG.NUM_BARS_PER_ROW) + bar;
+                label = this.labelManager.create("valueLabel" + labelValue, monthData, labelProperty);
+                currentValueGroup.add(label.getSprite());
+
+                // Labels
+                if (row === 0) {
+                    labelProperty.position.copy(barMesh.position);
+                    labelProperty.position.y = APPCONFIG.LABEL_HEIGHT;
+                    labelProperty.position.add(APPCONFIG.LABEL_MONTH_OFFSET);
+                    labelProperty.scale = APPCONFIG.LABEL_SCALE;
+                    labelProperty.visibility = true;
+                    labelProperty.textColour = APPCONFIG.LABEL_TEXTCOLOUR;
+                    labelProperty.multiLine = false;
+                    label = this.labelManager.create("monthLabel" + bar, APPCONFIG.MONTHS[bar], labelProperty);
+                    this.root.add(label.getSprite());
+                }
+
+                if (bar === 0) {
+                    labelProperty.position.copy(barMesh.position);
+                    labelProperty.position.y = APPCONFIG.LABEL_HEIGHT;
+                    labelProperty.position.add(APPCONFIG.LABEL_YEAR_OFFSET);
+                    labelProperty.scale = APPCONFIG.LABEL_SCALE;
+                    labelProperty.visibility = true;
+                    labelProperty.textColour = APPCONFIG.LABEL_TEXTCOLOUR;
+                    labelProperty.multiLine = false;
+                    label = this.labelManager.create("yearLabel" + row, APPCONFIG.YEARS[row], labelProperty);
+                    this.root.add(label.getSprite());
+                }
+            }
+            monthlyLinePositions.push(linePositions);
+        }
+
+        this.bars = bars;
+
+        this.createGUI();
     }
 }
 
