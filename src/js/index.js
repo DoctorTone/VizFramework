@@ -366,6 +366,30 @@ class Framework extends BaseApp {
     zoomOut(status) {
         this.zoomingOut = status;
     }
+
+    toggleMonth(monthName, monthNum) {
+        const years = ["Year1"];
+        let month;
+        let currentMonth;
+        let numYears = years.length;
+        for(let i=0; i<numYears; ++i) {
+            month = years[i] + monthName;
+            currentMonth = this.getObjectByName(month);
+            if (currentMonth) {
+                currentMonth.visible = !currentMonth.visible;
+            }
+        }
+        // Set value visibility
+        let column;
+        let label;
+        for (let i=0; i<numYears; ++i) {
+            column = monthNum + (i*APPCONFIG.NUM_BARS_PER_ROW);
+            label = this.labelManager.getLabel("valueLabel" + column);
+            if (label) {
+                label.setVisibility(currentMonth.visible);
+            }
+        }
+    }
 }
 
 $(document).ready( () => {
