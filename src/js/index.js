@@ -92,6 +92,67 @@ class Framework extends BaseApp {
         guiWidth = parseInt(guiWidth, 10);
         let gui = new controlkit();
         gui.addPanel( {label: "Configuration", width: guiWidth, enable: false})
+            .addSubGroup( {label: "Months", enable: false} )
+                    .addCheckbox(monthConfig, "Jan", {
+                        onChange: () => {
+                            this.toggleMonth("Jan", 0);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Feb", {
+                        onChange: () => {
+                            this.toggleMonth("Feb", 1);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Mar", {
+                        onChange: () => {
+                            this.toggleMonth("Mar", 2);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Apr", {
+                        onChange: () => {
+                            this.toggleMonth("Apr", 3);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "May", {
+                        onChange: () => {
+                            this.toggleMonth("May", 4);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Jun", {
+                        onChange: () => {
+                            this.toggleMonth("Jun", 5);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Jul", {
+                        onChange: () => {
+                            this.toggleMonth("Jul", 6);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Aug", {
+                        onChange: () => {
+                            this.toggleMonth("Aug", 7);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Sep", {
+                        onChange: () => {
+                            this.toggleMonth("Sep", 8);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Oct", {
+                        onChange: () => {
+                            this.toggleMonth("Oct", 9);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Nov", {
+                        onChange: () => {
+                            this.toggleMonth("Nov", 10);
+                        }
+                    })
+                    .addCheckbox(monthConfig, "Dec", {
+                        onChange: () => {
+                            this.toggleMonth("Dec", 11);
+                        }
+                    })
             .addSubGroup( {label: "Gaps", enable: false} )
                 .addSlider(gapMonthConfig, "Month", "range", {
                     onChange: () => {
@@ -297,7 +358,7 @@ class Framework extends BaseApp {
          
         this.cameraRotate = status;
     }
-    
+
     zoomIn(status) {
         this.zoomingIn = status;
     }
