@@ -239,6 +239,40 @@ class Framework extends BaseApp {
 
         this.createGUI();
     }
+
+    update() {
+        let delta = this.clock.getDelta();
+
+        if (this.cameraRotate) {
+            this.root.rotation[this.rotAxis] += (this.rotSpeed * this.rotDirection * delta);
+        }
+
+        if(this.zoomingIn) {
+            this.tempVec.copy(this.camera.position);
+            this.tempVec.multiplyScalar(this.zoomSpeed * delta);
+            this.root.position.add(this.tempVec);
+            //DEBUG
+            //console.log("Root = ", this.root.position);
+        }
+
+        if(this.zoomingOut) {
+            this.tempVec.copy(this.camera.position);
+            this.tempVec.multiplyScalar(this.zoomSpeed * delta);
+            this.root.position.sub(this.tempVec);
+            //DEBUG
+            //console.log("Root = ", this.root.position);
+        }
+
+        super.update();
+    }
+
+    zoomIn(status) {
+        this.zoomingIn = status;
+    }
+
+    zoomOut(status) {
+        this.zoomingOut = status;
+    }
 }
 
 $(document).ready( () => {
@@ -251,4 +285,122 @@ $(document).ready( () => {
     app.createScene();
 
     app.run();
+
+    // Elements
+    let rotateLeft = $("#rotateLeft");
+    let rotateRight = $("#rotateRight");
+    let rotateUp = $("#rotateUp");
+    let rotateDown = $("#rotateDown");
+    let zoomIn = $("#zoomIn");
+    let zoomOut = $("#zoomOut");
+
+    // Mouse interaction
+    rotateLeft.on("mousedown", () => {
+        app.rotateCamera(true, APPCONFIG.LEFT);
+    });
+
+    rotateLeft.on("mouseup", () => {
+        app.rotateCamera(false);
+    });
+
+    rotateRight.on("mousedown", () => {
+        app.rotateCamera(true, APPCONFIG.RIGHT);
+    });
+
+    rotateRight.on("mouseup", () => {
+        app.rotateCamera(false);
+    });
+
+    rotateUp.on("mousedown", () => {
+        app.rotateCamera(true, APPCONFIG.UP);
+    });
+
+    rotateUp.on("mouseup", () => {
+        app.rotateCamera(false);
+    });
+
+    rotateDown.on("mousedown", () => {
+        app.rotateCamera(true, APPCONFIG.DOWN);
+    });
+
+    rotateDown.on("mouseup", () => {
+        app.rotateCamera(false);
+    });
+
+    zoomIn.on("mousedown", () => {
+        app.zoomIn(true);
+    });
+
+    zoomIn.on("mouseup", () => {
+        app.zoomIn(false);
+    });
+
+    zoomOut.on("mousedown", () => {
+        app.zoomOut(true);
+    });
+
+    zoomOut.on("mouseup", () => {
+        app.zoomOut(false);
+    });
+
+    zoomOut.on("mousedown", () => {
+        app.zoomOut(true);
+    });
+
+    zoomOut.on("mouseup", () => {
+        app.zoomOut(false);
+    });
+
+    // Touch interaction
+    rotateLeft.on("touchstart", () => {
+        app.rotateCamera(true, APPCONFIG.LEFT);
+    });
+
+    rotateLeft.on("touchend", () => {
+        app.rotateCamera(false);
+    });
+
+    rotateRight.on("touchstart", () => {
+        app.rotateCamera(true, APPCONFIG.RIGHT);
+    });
+
+    rotateRight.on("touchend", () => {
+        app.rotateCamera(false);
+    });
+
+    rotateUp.on("touchstart", () => {
+        app.rotateCamera(true, APPCONFIG.UP);
+    });
+
+    rotateUp.on("touchend", () => {
+        app.rotateCamera(false);
+    });
+
+    rotateDown.on("touchstart", () => {
+        app.rotateCamera(true, APPCONFIG.DOWN);
+    });
+
+    rotateDown.on("touchend", () => {
+        app.rotateCamera(false);
+    });
+
+    zoomIn.on("touchstart", () => {
+        app.zoomIn(true);
+    });
+
+    zoomIn.on("touchend", () => {
+        app.zoomIn(false);
+    });
+
+    zoomOut.on("touchstart", () => {
+        app.zoomOut(true);
+    });
+
+    zoomOut.on("touchend", () => {
+        app.zoomOut(false);
+    });
+
+    $("#info").on("click", () => {
+        $("#infoModal").modal();
+    });
 });
