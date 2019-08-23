@@ -13,7 +13,7 @@ const APPCONFIG = {
     GROUND_SEGMENTS: 16,
     GROUND_MATERIAL: 0xcbcbcb,
     barStartPos: {
-        x: 0,
+        x: -75,
         y: 0,
         z: 0
     },
