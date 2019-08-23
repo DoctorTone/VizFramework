@@ -16,10 +16,7 @@ const SceneConfig = {
     },
     NEAR_PLANE: 0.1,
     FAR_PLANE: 10000,
-    FOV: 45,
-    GroundWidth: 2000,
-    GroundHeight: 1000,
-    GroundSegments: 16
+    FOV: 45
 };
 
 export { SceneConfig };

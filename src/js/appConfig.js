@@ -8,6 +8,10 @@ const APPCONFIG = {
     BAR_SEGMENTS: 16,
     NUM_BARS_PER_ROW: 12,
     NUM_ROWS: 1,
+    GROUND_WIDTH: 1800,
+    GROUND_HEIGHT: 1000,
+    GROUND_SEGMENTS: 16,
+    GROUND_MATERIAL: 0xcbcbcb,
     barStartPos: {
         x: -165,
         y: 0,
@@ -21,6 +25,20 @@ const APPCONFIG = {
         0xffff00,
         0x00ffff
     ],
+    MONTHS: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+    ],
     LABEL_SCALE: {
         x: 20,
         y: 5,
@@ -28,6 +46,11 @@ const APPCONFIG = {
     },
     LABEL_HEIGHT: 2,
     LABEL_TEXTCOLOUR: "rgba(255, 255, 255, 1.0)",
+    LABEL_MONTH_OFFSET: {
+        x: 0,
+        y: 0,
+        z: 10
+    },
     VALUE_OFFSET: 5,
     VALUE_SCALE: {
         x: 17.5,

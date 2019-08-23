@@ -6,6 +6,8 @@ import { LabelManager } from "./LabelManager";
 import controlkit from "controlkit";
 import bootstrap from "bootstrap";
 
+import exampleData from "../../data/exampleData.json";
+
 class Framework extends BaseApp {
     constructor() {
         super();
@@ -140,6 +142,7 @@ class Framework extends BaseApp {
         // Add ground
         this.addGroundPlane();
 
+        /*
         // Add bars to scene
         const barGeom = new THREE.CylinderBufferGeometry(APPCONFIG.BAR_RADIUS, APPCONFIG.BAR_RADIUS, APPCONFIG.BAR_HEIGHT, APPCONFIG.BAR_SEGMENTS, APPCONFIG.BAR_SEGMENTS);
         const bars = [];
@@ -182,7 +185,7 @@ class Framework extends BaseApp {
                 bars.push(barMesh);
                 barMesh.position.set(APPCONFIG.barStartPos.x + (APPCONFIG.BAR_INC_X * bar), APPCONFIG.barStartPos.y, APPCONFIG.barStartPos.z + (APPCONFIG.BAR_INC_Z * row));
 
-                yearData = salesData["Year" + currentYear];
+                yearData = exampleData["Year" + currentYear];
                 monthData = yearData[bar].sales;
                 if (monthData === 0) {
                     monthData = 0.001;
@@ -238,6 +241,7 @@ class Framework extends BaseApp {
         this.bars = bars;
 
         this.createGUI();
+        */
     }
 
     update() {
