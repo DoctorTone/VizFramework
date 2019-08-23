@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { BaseApp } from "./baseApp";
 import { APPCONFIG } from "./appConfig";
 import { LabelManager } from "./LabelManager";
+import controlkit from "controlkit";
+import bootstrap from "bootstrap";
 
 class Framework extends BaseApp {
     constructor() {
