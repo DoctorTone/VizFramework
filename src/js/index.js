@@ -1,7 +1,8 @@
 import $ from "jquery";
 import * as THREE from "three";
-
 import { BaseApp } from "./baseApp";
+import { APPCONFIG } from "./appConfig";
+import { LabelManager } from "./LabelManager";
 
 class Framework extends BaseApp {
     constructor() {

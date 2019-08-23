@@ -19,10 +19,7 @@ const SceneConfig = {
     FOV: 45,
     GroundWidth: 2000,
     GroundHeight: 1000,
-    GroundSegments: 16,
-    RIGHT: 0,
-    LEFT: 1,
-    ZOOM_SPEED: 0.1
+    GroundSegments: 16
 };
 
 export { SceneConfig };
