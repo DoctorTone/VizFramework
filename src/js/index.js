@@ -142,7 +142,6 @@ class Framework extends BaseApp {
         // Add ground
         this.addGroundPlane();
 
-        /*
         // Add bars to scene
         const barGeom = new THREE.CylinderBufferGeometry(APPCONFIG.BAR_RADIUS, APPCONFIG.BAR_RADIUS, APPCONFIG.BAR_HEIGHT, APPCONFIG.BAR_SEGMENTS, APPCONFIG.BAR_SEGMENTS);
         const bars = [];
@@ -241,7 +240,6 @@ class Framework extends BaseApp {
         this.bars = bars;
 
         this.createGUI();
-        */
     }
 
     update() {

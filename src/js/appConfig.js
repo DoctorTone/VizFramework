@@ -13,11 +13,12 @@ const APPCONFIG = {
     GROUND_SEGMENTS: 16,
     GROUND_MATERIAL: 0xcbcbcb,
     barStartPos: {
-        x: -165,
+        x: 0,
         y: 0,
-        z: 90
+        z: 0
     },
     BAR_INC_X: 30,
+    BAR_INC_Z: 0,
     BAR_COLOURS: [
         0xff0000,
         0x00ff00,
@@ -39,6 +40,13 @@ const APPCONFIG = {
         "Nov",
         "Dec"
     ],
+    YEARS: [
+        "Year 1",
+        "Year 2",
+        "Year 3",
+        "Year 4",
+        "Year 5"
+    ],
     LABEL_SCALE: {
         x: 20,
         y: 5,
@@ -50,6 +58,11 @@ const APPCONFIG = {
         x: 0,
         y: 0,
         z: 10
+    },
+    LABEL_YEAR_OFFSET: {
+        x: -15,
+        y: 0,
+        z: 0
     },
     VALUE_OFFSET: 5,
     VALUE_SCALE: {
