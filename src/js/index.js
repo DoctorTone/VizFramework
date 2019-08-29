@@ -434,6 +434,14 @@ class Framework extends BaseApp {
         }
     }
 
+    toggleTransparency(year) {
+        let currentYear = this.getObjectByName(year);
+        if (currentYear) {
+            let opacity = currentYear.children[0].material.opacity;
+            opacity === 1 ? currentYear.children[0].material.opacity = 0.5 : currentYear.children[0].material.opacity = 1.0;
+        }
+    }
+    
     scaleBars(xScale, zScale) {
         let scaledIncX = APPCONFIG.BAR_INC_X * xScale;
         let scaledIncZ = APPCONFIG.BAR_INC_Z * zScale;
