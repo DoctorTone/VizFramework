@@ -1,5 +1,9 @@
 import $ from "jquery";
 import * as THREE from "three";
+import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
+import { Line2 } from 'three/examples/jsm/lines/Line2';
+
 import { BaseApp } from "./baseApp";
 import { APPCONFIG } from "./appConfig";
 import { LabelManager } from "./LabelManager";
@@ -306,6 +310,45 @@ class Framework extends BaseApp {
 
         this.bars = bars;
 
+        // Lines
+        const lineColour = new THREE.Color();
+        lineColour.setHex(0xdadada);
+        let lineColours = [];
+        const numPositions = monthlyLinePositions[0].length;
+        for(let i=0; i<numPositions; ++i) {
+            lineColours.push(lineColour.r, lineColour.g, lineColour.b);
+        }
+
+        let lineMat = new LineMaterial( {
+            color: 0xffffff,
+            linewidth: 10,
+            vertexColors: THREE.VertexColors,
+            dashed: false
+        });
+
+        lineMat.resolution.set( window.innerWidth, window.innerHeight );
+
+        const numLineGeometries = monthlyLinePositions.length;
+        let lineGeom;
+        let line;
+        const scale = 1;
+        let lineGeoms = [];
+        for(let i=0; i<numLineGeometries; ++i) {
+            lineGeom = new LineGeometry();
+            lineGeom.setPositions(monthlyLinePositions[i]);
+            lineGeom.setColors(lineColours);
+            lineGeoms.push(lineGeom);
+
+            line = new Line2(lineGeom, lineMat);
+            currentYear = i + 1;
+            line.name = "Year" + currentYear + "Trend";
+            line.computeLineDistances();
+            line.scale.set(scale, scale, scale);
+            line.visible = false;
+            this.root.add(line);
+        }
+        this.lineGeoms = lineGeoms;
+
         this.createGUI();
     }
 
@@ -441,11 +484,33 @@ class Framework extends BaseApp {
             opacity === 1 ? currentYear.children[0].material.opacity = 0.5 : currentYear.children[0].material.opacity = 1.0;
         }
     }
+
+    toggleTrend(year) {
+        let currentTrend = this.getObjectByName(year + "Trend");
+        if(currentTrend) {
+            currentTrend.visible = !currentTrend.visible;
+        }
+    }
+
+    toggleValues(year) {
+        let currentYear = this.getObjectByName("Values" + year);
+        if (currentYear) {
+            currentYear.visible = !currentYear.visible;
+        }
+    }
     
     scaleBars(xScale, zScale) {
         let scaledIncX = APPCONFIG.BAR_INC_X * xScale;
         let scaledIncZ = APPCONFIG.BAR_INC_Z * zScale;
         this.redrawScene(scaledIncX, scaledIncZ);
+    }
+
+    scaleYears(name, scale) {
+        let currentYear = this.getObjectByName(name);
+        if (currentYear) {
+            currentYear.scale.set(1, scale, 1);
+        }
+        this.redrawValueLabels(currentYear);
     }
 }
 
