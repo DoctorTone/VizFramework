@@ -1,10 +1,22 @@
 {
   "name": "vizframework",
   "version": "1.0.0",
-  "description": "Visualisation framework",
+  "description": "visualisation framework",
   "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "controlkit": "^0.1.9",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.15.0",
+    "three": "^0.119.1",
+    "three-trackballcontrols": "0.0.8"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx parcel index.html"
   },
   "repository": {
     "type": "git",
@@ -15,16 +27,5 @@
   "bugs": {
     "url": "https://github.com/DoctorTone/VizFramework/issues"
   },
-  "homepage": "https://github.com/DoctorTone/VizFramework#readme",
-  "devDependencies": {
-    "parcel-bundler": "^1.12.3"
-  },
-  "dependencies": {
-    "bootstrap": "^4.3.1",
-    "controlkit": "^0.1.9",
-    "jquery": "^3.4.0",
-    "popper.js": "^1.15.0",
-    "three": "^0.107.0",
-    "three-trackballcontrols": "0.0.8"
-  }
+  "homepage": "https://github.com/DoctorTone/VizFramework#readme"
 }
