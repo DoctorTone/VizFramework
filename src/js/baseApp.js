@@ -8,13 +8,13 @@ let TrackballControls = require("three-trackballcontrols");
 export class BaseApp {
     constructor() {
         this.renderer = null;
-        this.scenes = [];
-        this.currentScene = 0;
+        this.scene = null;
         this.camera = null;
         this.controls = null;
         this.stats = null;
         this.container = null;
         this.mouse = new THREE.Vector2();
+        this.pickingEnabled = false;
         this.pickedObjects = [];
         this.selectedObject = null;
         this.hoverObjects = [];
@@ -26,8 +26,7 @@ export class BaseApp {
         this.tempVector = new THREE.Vector3();
     }
 
-    init(container) {
-        this.container = container;
+    init() {
         this.createRenderer();
         this.createCamera();
         this.createControls();
@@ -45,7 +44,7 @@ export class BaseApp {
         this.renderer.shadowMap.enabled = true;
 
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.container.appendChild( this.renderer.domElement );
+        document.body.appendChild( this.renderer.domElement );
 
         window.addEventListener('keydown', event => {
             this.keyDown(event);
@@ -55,15 +54,23 @@ export class BaseApp {
             this.windowResize(event);
         }, false);
 
-        document.addEventListener("mousemove", event => {
+        this.renderer.domElement.addEventListener("mousedown", event => {
+            this.mouseClicked(event);
+        }, false);
+
+        this.renderer.domElement.addEventListener("mouseup", event => {
+            this.mouseUp(event);
+        }, false);
+
+        this.renderer.domElement.addEventListener("mousemove", event => {
             this.mouseMoved(event);
         }, false);
     }
 
     keyDown(event) {
         //Key press functionality
-        switch(event.keyCode) {
-            case 83: //'S'
+        switch(event.key) {
+            case "s":
                 if (this.stats) {
                     if (this.statsShowing) {
                         $("#Stats-output").hide();
@@ -74,7 +81,7 @@ export class BaseApp {
                     }
                 }
                 break;
-            case 80: //'P'
+            case "p":
                 console.log('Cam =', this.camera.position);
                 console.log('Look =', this.controls.target);
         }
@@ -83,25 +90,28 @@ export class BaseApp {
     mouseClicked(event) {
         //Update mouse state
         event.preventDefault();
+        if (!this.pickingEnabled) return;
+        
         this.pickedObjects.length = 0;
 
-        if(event.type === 'mouseup') {
-            this.mouse.endX = event.clientX;
-            this.mouse.endY = event.clientY;
-            this.mouse.down = false;
-            this.objectsPicked = false;
-            return;
-        }
         this.mouse.set((event.clientX / window.innerWidth) * 2 - 1,
             -(event.clientY / window.innerHeight) * 2 + 1);
         this.mouse.down = true;
         this.raycaster.setFromCamera(this.mouse, this.camera);
-        let intersects = this.raycaster.intersectObjects( this.scenes[this.currentScene].children, true );
+        let intersects = this.raycaster.intersectObjects( this.scene.children, true );
         if(intersects.length > 0) {
             this.selectedObject = intersects[0].object;
             //DEBUG
             console.log("Picked = ", this.selectedObject);
         }
+    }
+
+    mouseUp(event) {
+        event.preventDefault();
+
+        this.sliceScale = 1;
+        this.renderUpdate = true;
+        this.mouse.down = false;
     }
 
     mouseMoved(event) {
@@ -111,7 +121,7 @@ export class BaseApp {
         this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     }
 
-    windowResize(event) {
+    windowResize() {
         //Handle window resize
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
@@ -121,7 +131,6 @@ export class BaseApp {
 
     createScene() {
         let scene = new THREE.Scene();
-        this.scenes.push(scene);
 
         let ambientLight = new THREE.AmbientLight(SceneConfig.ambientLightColour);
         scene.add(ambientLight);
@@ -145,15 +154,11 @@ export class BaseApp {
         pointLight.name = 'PointLight';
         scene.add(pointLight);
 
-        return this.scenes.length-1;
-    }
-
-    addToScene(object) {
-        this.scenes[this.currentScene].add(object);
+        this.scene = scene;
     }
 
     getObjectByName(name) {
-        return this.scenes[this.currentScene].getObjectByName(name);
+        return this.scene.getObjectByName(name);
     }
 
     createCamera() {
@@ -176,7 +181,7 @@ export class BaseApp {
     }
 
     createControls() {
-        this.controls = new TrackballControls(this.camera, this.container);
+        this.controls = new TrackballControls(this.camera, this.renderer.domElement);
         this.controls.rotateSpeed = 1.0;
         this.controls.zoomSpeed = 1.0;
         this.controls.panSpeed = 1.0;
@@ -196,11 +201,6 @@ export class BaseApp {
         this.controls.target.copy(lookAt);
     }
 
-    setCamera(mode) {
-        let camPos = mode === NEAR ? this.camPosNear : this.camPosFar;
-        this.camera.position.copy(camPos);
-    }
-
     update() {
         //Do any updates
         this.controls.update();
@@ -209,7 +209,7 @@ export class BaseApp {
 
     run() {
         this.update();
-        this.renderer.render( this.scenes[this.currentScene], this.camera );
+        this.renderer.render( this.scene, this.camera );
         if(this.stats) this.stats.update();
         requestAnimationFrame(() => {
             this.run();

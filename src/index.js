@@ -1,15 +1,16 @@
 import $ from "jquery";
 import * as THREE from "three";
 
-import { BaseApp } from "./baseApp";
-import { APPCONFIG } from "./appConfig";
-import { LabelManager } from "./LabelManager";
-import bootstrap from "bootstrap";
+import { BaseApp } from "./js/baseApp";
+import { APPCONFIG } from "./js/appConfig";
+import "bootstrap";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/frameworkStyles.css";
 
 class Framework extends BaseApp {
     constructor() {
         super();
-        this.labelManager = new LabelManager();
         this.cameraRotate = false;
         this.rotSpeed = Math.PI/20;
         this.rotDirection = 1;
@@ -51,7 +52,7 @@ class Framework extends BaseApp {
         super.createScene();
         // Create root object.
         this.root = new THREE.Object3D();
-        this.addToScene(this.root);
+        this.scene.add(this.root);
         this.root.rotation.y = APPCONFIG.ROOT_ROTATE;
 
         // Add ground
@@ -129,12 +130,10 @@ class Framework extends BaseApp {
     }
 }
 
-$(document).ready( () => {
-    
-    const container = document.getElementById("WebGL-Output");
+$( () => {
     const app = new Framework();
 
-    app.init(container);
+    app.init();
     app.createScene();
 
     app.run();
